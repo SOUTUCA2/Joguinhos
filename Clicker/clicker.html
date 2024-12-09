@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        display: grid;
+        margin: 0;
+        grid-template-rows: auto 1fr auto;
+        height: 100vh;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      }
+      .top {
+        background-color: wheat;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .principal {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        gap: 20px;
+      }
+      .compras {
+        text-align: center;
+        border-right: 1px solid black;
+        padding-top: 40px;
+      }
+      .menu {
+        text-align: center;
+        border-right: 1px solid black;
+        align-items: center;
+        padding-top: 50px;
+      }
+      .upgrade {
+        text-align: center;
+        padding-top: 40px;
+      }
+      button:disabled {
+        background-color: gray;
+        cursor: not-allowed;
+      }
+      button {
+        padding: 20px;
+        width: 400px;
+        height: 100px;
+      }
+
+    </style>
+  </head>
+  <body>
+
+    
+    <div class="top">
+      <div class="dinero">dinheiro: <span id="dinheiro">0</span></div>
+      <div class="ndefabrica">fabricas: <span id="fabrica">0</span></div>
+      <div class="ndeind">industrias: <span id="industria">0</span></div>
+      <div class="ndecid">cidade: <span id="cidade">0</span></div>
+      <div class="dps">dinheiro por segundo: <span id="dps">0</span></div>
+      
+    </div>
+
+    <div class="principal">
+
+    <div class="compras">
+        
+        <div class="fabrica1" onclick="fabricacompra()">
+          <img src="img/fabrica.png" height="50px" />
+          <h1>Preço: <span id="precof">50</span></h1>
+        </div>
+
+        <div class="industria1" onclick="indcompra()">
+            <img src="img/industria.png" height="100px">
+            <h1>Preço: <span id="precoi">75</span></h1>
+        </div>
+
+        <!--cidade-->
+        <div class="cidade1" onclick="cidadecompra()">
+          <img src="img/cidade.png" width="100px">
+          <h1>Preço: <span id="precoc">100</span></h1>
+            </div>
+
+        </div>
+
+
+    <div class="menu">
+      <div class="click" onclick="add()">
+        <img src="img/receba.jpg" height="300px" />
+        
+      </div>
+    </div>
+
+
+      <div class="upgrade">
+        <div class="upfab1" onclick="upfab1()"><button id="upfab1">10 fabricas: <br>Aumenta a eficiência das fábricas em 2x</button></div>
+        <div class="upfab2" onclick="upfab2()"><button id="upfab2">20 fabricas: <br>Diminui o preço das fabricas em 20%</button></div>
+        <div class="upin1" onclick="upin1()"><button id="upin1">10 industrias: <br>Aumenta a eficiência das industrias em 10%</button></div>
+      </div>
+    </div>
+ 
+    </div>
+    <script>
+      //atualizar pag a cada novo dinheiro
+
+      function updateDisplay() {
+        document.getElementById("dinheiro").textContent = dinheiro;
+        document.getElementById("fabrica").textContent = fabrica;
+        document.getElementById("industria").textContent = industria;
+        document.getElementById("cidade").textContent = cidade;
+        document.getElementById("precof").textContent = precof;
+        document.getElementById("precoi").textContent = precoi;
+        document.getElementById("precoc").textContent = precoc;
+        document.getElementById("dps").textContent = dps;
+      }
+
+      var precof = 50;
+      var precoi = 75;
+      var precoc = 150;
+      var dps = 0;
+      var fabrica = 0;
+      var industria = 0;
+      var cidade = 0;
+
+      var preco_upfab1 = 100
+      var preco_upfab2 = 400;
+      var preco_upin1 = 1000;
+
+      //click
+      var dinheiro = 0;
+      function add() {
+        dinheiro += 1;
+        updateDisplay();
+      }
+
+      
+      function DPS() {
+  // Atualiza o valor de dps com base nas fábricas e indústrias e cidades
+  dps = (fabrica * 0.5) + (industria * 2) + (cidade * 5);
+  updateDisplay();  // Atualiza a interface com o novo dps
+}
+
+// Função de compra de fábricas
+function fabricacompra() {
+  if (dinheiro >= precof) {
+    dinheiro -= precof;
+    fabrica += 1;
+
+    // Atualiza o preço da fábrica
+    precof = Math.floor(precof * 1.2); 
+
+    // Chama a função DPS para recalcular o dps após comprar uma fábrica
+    DPS();
+
+    // Atualiza a interface com os novos valores
+    updateDisplay();
+  }
+}
+
+// Função de compra de indústrias
+function indcompra() {
+  if (dinheiro >= precoi) {
+    dinheiro -= precoi;
+    industria += 1;
+
+    // Atualiza o preço da indústria
+    precoi = Math.floor(precoi * 1.2);
+
+    // Chama a função DPS para recalcular o dps após comprar uma indústria
+    DPS();
+
+    // Atualiza a interface com os novos valores
+    updateDisplay();
+  }
+}
+
+//compra de cidades
+
+function cidadecompra() {
+  if (dinheiro >= precoc) {
+    dinheiro -= precoc;
+    cidade += 1;
+    precoc = Math.floor(precoc * 1.2);
+    DPS();
+    updateDisplay();
+    }
+    }
+
+
+// Atualiza a cada 1 segundo o dinheiro com base no dps
+setInterval(() => {
+  dinheiro += dps; // Adiciona dinheiro com base no dps
+  updateDisplay();  // Atualiza a interface com o novo valor de dinheiro
+}, 1000);
+
+
+
+      //upgrades
+      function upfab1() {
+        if (fabrica >= 10 && dinheiro > preco_upfab1) {
+            dps += Math.floor(fabrica * 2);
+            dinheiro -= preco_upfab1
+            document.getElementById("upfab1").disabled = true;
+            updateDisplay();
+
+        }
+    }
+        function upfab2() {
+          if (fabrica >= 20 && dinheiro >= preco_upfab2) {
+            precof = precof - (precof * 0.20);
+            dinheiro -= preco_upfab2;
+            document.getElementById("upfab2").disabled = true;
+            updateDisplay();
+          }
+        }
+       
+        function upin1() {
+          if (industria >= 10 && dinheiro >= preco_upin1) {
+            dps += Math.floor(industria * 0.1);
+            dinheiro -= preco_upin1;
+            document.getElementById("upin1").disabled = true;
+            updateDisplay();
+            }
+            }
+      
+    </script>
+  </body>
+</html>
